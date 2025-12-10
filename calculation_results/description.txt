@@ -1,0 +1,62 @@
+PRE-CALCULATED SIMULATION DATA
+================================================================================
+
+This folder contains pre-calculated numerical data used for the plots in the paper.
+Each ZIP archive corresponds to a specific simulation scenario and contains a single 
+'results.txt' file with the generated data columns.
+
+ARCHIVE CONTENTS AND PARAMETERS:
+
+--------------------------------------------------------------------------------
+1. Archive: C_TN.zip
+--------------------------------------------------------------------------------
+Description: Simulation of the Uncompensated Tandem TN cell.
+Source Folder: C_TN
+File inside: results.txt
+
+Simulation Parameters:
+- Number of points: 5000
+- Birefringence (ne - no): 0.2
+- Mean cell thickness (h): 10,000 nm (10 μm)
+- Thickness mismatch parameter (b): 0.02
+- Wavelength range: 450 nm - 750 nm
+
+--------------------------------------------------------------------------------
+2. Archive: C_TN_A.zip
+--------------------------------------------------------------------------------
+Description: Simulation of the Tandem TN cell with Active Compensation (Strategy A).
+Source Folder: C_TN_A
+File inside: results.txt
+
+Simulation Parameters:
+- Number of points: 5000
+- Birefringence (ne - no): 0.2
+- Mean cell thickness (h): 100,000 nm (100 μm)
+- Thickness mismatch parameter (b): 0.05
+- Wavelength range: 450 nm - 750 nm
+
+--------------------------------------------------------------------------------
+3. Archive: C_TN_compare.zip
+--------------------------------------------------------------------------------
+Description: Comparative analysis of Uncompensated, Active, and Passive strategies.
+Source Folder: C_TN_compare
+File inside: results.txt
+
+Simulation Parameters:
+- Number of points: 5000
+- Birefringence (ne - no): 0.2
+- Wavelength range: 450 nm - 750 nm
+
+Scenario 1: Uncompensated & Passive Strategy (Strategy B)
+  - Mean cell thickness (h): 10,000 nm (10 μm)
+  - Thickness mismatch parameter (b): 0.02
+  - Passive Optimization Wavelength: 600 nm
+
+Scenario 2: Active Compensation (Strategy A)
+  - Mean cell thickness (h): 100,000 nm (100 μm)
+  - Thickness mismatch parameter (b): 0.05
+
+--------------------------------------------------------------------------------
+Notes:
+- The structure of columns in 'results.txt' is detailed in the main README.md file.
+- All phase modulation calculations assume a target phase shift of PI (π).

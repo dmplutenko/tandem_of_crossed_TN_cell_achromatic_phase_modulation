@@ -12,13 +12,15 @@ The repository is organized into three main directories, each corresponding to a
 2.  **`C_TN_A`**: Simulations for a Tandem TN cell with **Active Compensation** (Strategy A).
 3.  **`C_TN_compare`**: Comparative analysis of Uncompensated, Active (Strategy A), and Passive (Strategy B) compensation schemes.
 
+Additionally, the **`calculation_results`** folder contains pre-calculated raw data archives for quick access.
+
 ## Prerequisites
 
 To run the simulations and generate the plots, you need the following software installed:
 
 * **Node.js**: For running the calculation logic (`calculate.js`).
 * **Gnuplot**: For plotting the data (`.gnu` scripts).
-* **Python 3**: For converting Gnuplot `.tex` output to PDF (via the `textoimage` script).
+* **Python 2**: For converting Gnuplot `.tex` output to PDF (via the `textoimage` script).
 * **LaTeX**: Required by the `textoimage` script to render labels.
 
 ## Installation and Usage

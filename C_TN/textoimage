@@ -1,0 +1,201 @@
+#!/usr/bin/env python2
+#                 T E X T O I M A G E
+#
+#                 by Plutenko Dmytro
+#	           dmplutenko@gmail.com
+#
+scriptversion="version 1.0 (2012.11.23)"
+#
+#
+#
+import sys
+import os
+
+density=600
+fileOutType="ps"
+tmpTexName="tmp_file_tex_to_image"
+center=0
+bodyonly=1
+fontsize=12
+
+beginTmpTex1="\\documentclass[preview, border=3mm]{standalone}\n"
+#beginTmpTex1="\\documentclass[english]{standalone}\n"
+
+beginTmpTex1+="\\usepackage[T1]{fontenc}\n"
+beginTmpTex1+="\\usepackage[latin9]{inputenc}\n"
+#beginTmpTex1+="\\usepackage[a0paper]{geometry}\n"
+beginTmpTex1+="\\usepackage[utf8]{inputenc}\n"
+beginTmpTex1+="\\usepackage{float}\n"
+beginTmpTex1+="\\usepackage{amsmath}\n"
+beginTmpTex1+="\\usepackage{amssymb}\n"
+beginTmpTex1+="\\usepackage{graphics}\n"
+beginTmpTex1+="\\usepackage{epstopdf}\n"
+beginTmpTex1+="\\usepackage{graphicx}\n"
+beginTmpTex1+="\\usepackage{nopageno}\n"
+beginTmpTex1+="\\usepackage{txfonts}\n"
+beginTmpTex1+="\\usepackage[usenames]{color}\n"
+beginTmpTex1+="\\usepackage["
+beginTmpTex2="pt]{extsizes}\n"
+beginTmpTex2+="\\usepackage[russian]{babel}\n"
+beginTmpTex2+="\\begin{document}\n"
+beginTmpTex=""
+beginTmpTexCenter="\\begin{center}\n"
+
+endTmpTexCenter="\\end{center}\n"
+endTmbText="\\end{document}\n"
+
+
+def helpMe():
+    print
+    print "script textoimage:"
+    print "usage: textoimage [ options ] inputfile1 inputfile2 ..."
+    print "\tinput files contain only body of tex document otherwise add -alldoc option"
+    print "Requirements:"
+    print "\tOS: Linux"
+    print "\tpdflatex"
+    print "\tpdftops"
+    print "\tImageMagick (convert)"
+    print "Options:"
+    print "\t -help            Print help massage"
+    print "\t -version         Print version"
+    print "\t -alldoc          Input files are whole tex documents"
+    print "\t -bodyonly        Input files are are only body of tex documents (default)"
+    print "\t -center          Image is centered"
+    print "\t -centeroff       Image is't centered (default)"
+    print "\t -density [dpi]   Set rendering dots per inch to dpi (default 600)"
+    print "\t -type [type]     Type of output file, for example png, gif, eps (default ps)"
+    print "\t -o [outputfile]  Set output file, in this case option 'type' ignored"
+    print "\t -fontsize [size] Set font size"
+    print "Examples:"
+    print "\ttextoimage myfile.tex"
+    print "\t\tmyfile.ps will be created"
+    print "\ttextoimage -type png myfile.tex"
+    print "\t\tmyfile.png will be created with dpi=600"
+    print "\ttextoimage -type bmp -density 400 myfile.tex"
+    print "\t\tmyfile.bmp will be created with dpi=400"
+    print "\ttextoimage -type jpg -o image.eps myfile.tex"
+    print "\t\timage.eps will be created, type settings ignored"
+    print "\ttextoimage -type jpg -density 400 -o image.eps myfile.tex"
+    print "\t\timage.eps will be created, type setting ignored and density setting ignored because eps is a vector graphic format"
+    
+def scriptVersion():
+    print scriptversion
+    
+def scriptError(e):
+    print e
+    sys.exit()
+    
+def outputFromInput(filename):
+    outfile=""
+    if filename.endswith(".txt")==1:
+        outfile=filename[0:len(filename)-len(".txt")]
+    elif filename.endswith(".tex")==1:
+        outfile=filename[0:len(filename)-len(".tex")]
+    else:
+        outfile=filename
+    outfile=outfile+"."+fileOutType
+    return outfile
+
+def ispdf(filename):
+    if filename.endswith(".pdf")==1:
+        return 1
+    return 0
+
+def iseps(filename):
+    if filename.endswith(".eps")==1:
+        return 1
+    return 0
+
+def isps(filename):
+    if filename.endswith(".ps")==1:
+        return 1
+    return 0
+
+def writeFile(inputName,outputName):
+    inputFile=open(inputName, "r")
+    tmpTex=open(tmpTexName+".tex","w")
+    if bodyonly==1:
+	tmpTex.write(beginTmpTex)
+	if center==1:
+	    tmpTex.write(beginTmpTexCenter)
+    
+    
+    tmpTex.write(inputFile.read())
+    if bodyonly==1:
+	if center==1:
+	    tmpTex.write(endTmpTexCenter)
+    
+    
+    tmpTex.write(endTmbText)
+    tmpTex.close()
+    inputFile.close()
+    os.system("pdflatex -interaction=nonstopmode "+tmpTexName+".tex\n")
+    if ispdf(outputName)==1:
+        os.system("mv "+tmpTexName+".pdf "+outputName+"\n")
+    elif iseps(outputName)==1:
+        os.system("pdftops -eps "+tmpTexName+".pdf\n")
+        os.system("mv "+tmpTexName+".eps "+outputName+"\n")
+        os.system("rm "+tmpTexName+".pdf\n")
+    elif isps(outputName)==1:
+        os.system("pdftops "+tmpTexName+".pdf\n")
+        os.system("mv "+tmpTexName+".ps "+outputName+"\n")
+        os.system("rm "+tmpTexName+".pdf\n")
+    else:
+        os.system("pdftops -eps "+tmpTexName+".pdf\n")
+        os.system("convert -density "+str(density)+" "+tmpTexName+".eps "+outputName+"\n")
+        os.system("rm "+tmpTexName+".pdf\n")
+        os.system("rm "+tmpTexName+".eps\n")
+    
+    os.system("rm "+tmpTexName+".tex\n")
+    os.system("rm "+tmpTexName+".log\n")
+    os.system("rm "+tmpTexName+".aux\n")
+
+arguments=sys.argv
+arguments.remove(arguments[0])
+inputs=[]
+outputs=[]
+flag=0
+while flag==0:
+    if "-help" in arguments:
+        helpMe()
+        sys.exit()
+    elif "-version" in arguments:
+        scriptVersion()
+        sys.exit()
+    elif "-o" in arguments:
+        outputs.append(arguments.pop(arguments.index("-o")+1))
+        arguments.remove("-o")
+    elif "-type" in arguments:
+        fileOutType=arguments.pop(arguments.index("-type")+1)
+        arguments.remove("-type")
+    elif "-density" in arguments:
+        density=int(arguments.pop(arguments.index("-density")+1))
+        arguments.remove("-density")
+    elif "-center" in arguments:
+        center=1
+        arguments.remove("-center")
+    elif "-centeroff" in arguments:
+        center=0
+        arguments.remove("-centeroff")
+    elif "-alldoc" in arguments:
+        bodyonly=0
+        arguments.remove("-alldoc")
+    elif "-bodyonly" in arguments:
+        bodyonly=1
+        arguments.remove("-bodyonly")
+    elif "-fontsize" in arguments:
+	fontsize=int(arguments.pop(arguments.index("-fontsize")+1))
+        arguments.remove("-fontsize")
+    else:
+        flag=1
+    
+
+beginTmpTex=beginTmpTex1+str(fontsize)+beginTmpTex2
+while len(arguments)>0:
+    inputs.append(arguments.pop(0))
+
+while len(outputs)<len(inputs):
+    outputs.append(outputFromInput(inputs[len(outputs)]))
+
+for x in xrange(len(inputs)):
+    writeFile(inputs[x],outputs[x])

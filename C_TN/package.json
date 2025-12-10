@@ -1,0 +1,9 @@
+{
+  "name": "calculate",
+  "version": "0.0.0",
+  "description": "calculate",
+  "dependencies": {
+    "mathjs": "15.1.0"
+  },
+  "author": "dmplutenko@gmail.com"
+}
