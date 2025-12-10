@@ -1,0 +1,18 @@
+# Node modules
+node_modules/
+
+# Generated output files
+results.txt
+*.pdf
+*.jpg
+*.png
+
+# Gnuplot generated latex files
+*.tex
+*.aux
+*.log
+*.eps
+
+# System files
+.DS_Store
+Thumbs.db
